@@ -22,4 +22,8 @@ impl KvStore {
     pub fn delete(&mut self, key: &str) -> Option<String> {
         self.map.remove(key)
     }
+
+    pub fn clear(&mut self) {
+        self.map.clear();
+    }
 }
