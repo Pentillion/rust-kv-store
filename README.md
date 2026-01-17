@@ -42,19 +42,19 @@ Returns the value associated with a key, or `None` if the key does not exist.
 
 - `fn set(&mut self, key: String, value: String)`
 
-Sets the value associated with a key. Overwrites any existing value.
+Stores a key-value pair. Overwrites any existing value.
 
 - `fn delete(&mut self, key: &str) -> Option<String>`
 
-Deletes the value associated with a key. Returns the deleted value if it existed.
+Removes a key-value pair. Returns the deleted value if it existed.
 
 - `fn clear(&mut self)`
 
-Clears all key-value pairs from the store.
+Removes all key-value pairs from the store.
 
 - `fn len(&self) -> usize`
 
-Returns the amount of values stored in the key-value store.
+Returns the number of key-value pairs in the store.
 
 ---
 
