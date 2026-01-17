@@ -70,3 +70,13 @@ fn test_clear_empty_store() {
     store.clear();
     assert_eq!(store.get("key"), None);
 }
+
+#[test]
+fn test_len() {
+    let mut store = KvStore::new();
+    store.set("key1".to_string(), "value1".to_string());
+    store.set("key2".to_string(), "value2".to_string());
+    assert_eq!(store.len(), 2);
+    store.clear();
+    assert_eq!(store.len(), 0);
+}

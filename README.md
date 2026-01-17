@@ -52,6 +52,10 @@ Deletes the value associated with a key. Returns the deleted value if it existed
 
 Clears all key-value pairs from the store.
 
+- `fn len(&self) -> usize`
+
+Returns the amount of values stored in the key-value store.
+
 ---
 
 ### Future Directions
