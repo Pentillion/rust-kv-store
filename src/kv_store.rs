@@ -12,13 +12,11 @@ impl KvStore {
     }
 
     pub fn get(&self, key: &str) -> Option<String> {
-        // TODO: implement
-        unimplemented!()
+        self.map.get(key).cloned()
     }
 
-    pub fn set(&self, key: String, value: String) {
-        // TODO: implement
-        unimplemented!()
+    pub fn set(&mut self, key: String, value: String) {
+        self.map.insert(key, value);
     }
 
     pub fn delete(&self, key: &str) -> Option<String> {
