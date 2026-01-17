@@ -86,7 +86,7 @@ let store = KvStore::load_from_file("store.json")?;
 
 - Persistence is manual. Call `save_to_file()` before the store is dropped
 - Data is serialized to JSON in pretty-print format (human-readable)
-- Returns `Result<T, String>`, check for file I/O and serialization errors.
+- Returns `Result<T, String>`, check for file I/O and serialization errors
 - File paths are relative to the working directory where the program runs
 
 **Example JSON output:**
