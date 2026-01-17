@@ -80,3 +80,17 @@ fn test_len() {
     store.clear();
     assert_eq!(store.len(), 0);
 }
+
+#[test]
+fn test_persistence() {
+    let mut store = KvStore::new();
+    store.set("key1".to_string(), "value1".to_string());
+    store.set("key2".to_string(), "value2".to_string());
+    store.save_to_file("target/test_persistence.json").expect("File is saved successfully.");
+    store.clear();
+    assert_eq!(store.len(), 0);
+    store = KvStore::load_from_file("target/test_persistence.json").expect("File is loaded successfully.");
+    assert_eq!(store.len(), 2);
+    assert_eq!(store.get("key1"), Some("value1".to_string()));
+    assert_eq!(store.get("key2"), Some("value2".to_string()));
+}

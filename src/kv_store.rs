@@ -1,6 +1,8 @@
 //! A simple in-memory key-value store for learning Rust systems programming.
 
 use std::collections::HashMap;
+use serde::{Serialize, Deserialize};
+use std::fs;
 
 /// A thread-unsafe, in-memory key-value store backed by a HashMap.
 ///
@@ -13,6 +15,7 @@ use std::collections::HashMap;
 /// store.set("key".to_string(), "value".to_string());
 /// assert_eq!(store.get("key"), Some("value".to_string()));
 /// ```
+#[derive(Serialize, Deserialize)]
 pub struct KvStore {
     map: HashMap<String, String>
 }
@@ -54,5 +57,21 @@ impl KvStore {
     /// Returns the number of key-value pairs in the store.
     pub fn len(&self) -> usize {
         self.map.len()
+    }
+
+    /// Saves the store to a json file.
+    pub fn save_to_file(&self, path: &str) -> Result<(), String> {
+        let json = serde_json::to_string_pretty(&self)
+            .map_err(|e| format!("Serialize error: {}", e))?;
+        fs::write(path, json)
+            .map_err(|e| format!("Write error: {}", e))
+    }
+
+    /// Loads the json from file and returns a KvStore struct.
+    pub fn load_from_file(path: &str) -> Result<Self, String> {
+        let json = fs::read_to_string(path)
+            .map_err(|e| format!("Read error: {}", e))?;
+        serde_json::from_str::<KvStore>(&json)
+            .map_err(|e| format!("Deserialize error: {}", e))
     }
 }

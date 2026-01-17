@@ -1,5 +1,8 @@
 # rust-kv-store
 
+An in-memory key-value store with disk persistence via JSON serialization.
+Data lives in RAM but can be manually saved and loaded from disk.
+
 ## Motivation
 
 This project is meant to learn systems programming concepts in Rust, including:
@@ -11,28 +14,23 @@ This project is meant to learn systems programming concepts in Rust, including:
 
 ---
 
-## Current State
-
-Currently, this is an in-memory key-value store implemented using a `HashMap`.
-The API is defined and tests will be added to ensure correctness as the project evolves.
-
----
-
-### Data Structure (Version 0)
+### Data Structure (Version 1)
 
 Internally, the store is backed by a `HashMap<String, String>`:
 
 ```rust
 use std::collections::HashMap;
+use serde::{Serialize, Deserialize};
 
-struct KvStore {
+#[derive(Serialize, Deserialize)]
+pub struct KvStore {
     map: HashMap<String, String>,
 }
 ```
 
 ---
 
-### API (Version 0)
+### API (Version 1)
 
 The in-memory key-value store exposes the following methods:
 
@@ -56,14 +54,59 @@ Removes all key-value pairs from the store.
 
 Returns the number of key-value pairs in the store.
 
+- `fn save_to_file(&self, path: &str) -> Result<(), String>`
+
+Serializes store data to json and saves the file on disk.
+
+- `fn load_from_file(path: &str) -> Result<KvStore, String>`
+
+Loads json data from disk, deserializes it and returns KvStore.
+
+---
+
+### Persistence (Version 1)
+
+Data can be manually persisted to disk using JSON serialization:
+
+**Saving:**
+
+```rust
+let mut store = KvStore::new();
+store.set("key".to_string(), "value".to_string());
+store.save_to_file("store.json")?;
+```
+
+**Loading:**
+
+```rust
+let store = KvStore::load_from_file("store.json")?;
+```
+
+**Important:**
+
+- Persistence is manual. Call `save_to_file()` before the store is dropped
+- Data is serialized to JSON in pretty-print format (human-readable)
+- Returns `Result<T, String>`, check for file I/O and serialization errors.
+- File paths are relative to the working directory where the program runs
+
+**Example JSON output:**
+
+```json
+{
+  "map": {
+    "key": "value"
+  }
+}
+```
+
 ---
 
 ### Future Directions
 
 Future iterations may include:
 
-- Persistence to disk
 - Concurrency and thread-safe access
 - Enhanced observability (logging, metrics)
+- Automatic persistence (auto-save on changes)
 
 Each feature will be added incrementally, maintaining simplicity and clarity.
