@@ -1,10 +1,10 @@
-//! A simple in-memory key-value store for learning Rust systems programming.
+//! A simple in-memory key-value store with JSON serialization and disk persistence.
 
 use std::collections::HashMap;
 use serde::{Serialize, Deserialize};
 use std::fs;
 
-/// A thread-unsafe, in-memory key-value store backed by a HashMap.
+/// An in-memory key-value store backed by a HashMap with JSON persistence support.
 ///
 /// # Examples
 ///
@@ -29,12 +29,6 @@ impl KvStore {
     }
 
     /// Retrieves the value associated with the given key.
-    ///
-    /// # Arguments
-    /// * `key` - The key to look up
-    ///
-    /// # Returns
-    /// Some(value) if the key exists, None otherwise
     pub fn get(&self, key: &str) -> Option<String> {
         self.map.get(key).cloned()
     }
@@ -59,7 +53,13 @@ impl KvStore {
         self.map.len()
     }
 
-    /// Saves the store to a json file.
+    /// Saves the store to a JSON file.
+    ///
+    /// # Arguments
+    /// * `path` - File path where the store will be written
+    ///
+    /// # Returns
+    /// Ok(()) if successful, Err with message describing serialization/IO errors
     pub fn save_to_file(&self, path: &str) -> Result<(), String> {
         let json = serde_json::to_string_pretty(&self)
             .map_err(|e| format!("Serialize error: {}", e))?;
@@ -67,7 +67,13 @@ impl KvStore {
             .map_err(|e| format!("Write error: {}", e))
     }
 
-    /// Loads the json from file and returns a KvStore struct.
+    /// Loads a KvStore from a JSON file.
+    ///
+    /// # Arguments
+    /// * `path` - File path where the store will be loaded
+    ///
+    /// # Returns
+    /// Ok(KvStore) if successful, Err with message describing serialization/IO errors
     pub fn load_from_file(path: &str) -> Result<Self, String> {
         let json = fs::read_to_string(path)
             .map_err(|e| format!("Read error: {}", e))?;
