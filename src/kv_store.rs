@@ -19,8 +19,7 @@ impl KvStore {
         self.map.insert(key, value);
     }
 
-    pub fn delete(&self, key: &str) -> Option<String> {
-        // TODO: implement
-        unimplemented!()
+    pub fn delete(&mut self, key: &str) -> Option<String> {
+        self.map.remove(key)
     }
 }
