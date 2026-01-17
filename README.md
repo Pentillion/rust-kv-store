@@ -38,15 +38,19 @@ The in-memory key-value store exposes the following methods:
 
 - `fn get(&self, key: &str) -> Option<String>`
 
-  Returns the value associated with a key, or `None` if the key does not exist.
+Returns the value associated with a key, or `None` if the key does not exist.
 
 - `fn set(&mut self, key: String, value: String)`
 
-  Sets the value associated with a key. Overwrites any existing value.
+Sets the value associated with a key. Overwrites any existing value.
 
 - `fn delete(&mut self, key: &str) -> Option<String>`
 
-  Deletes the value associated with a key. Returns the deleted value if it existed.
+Deletes the value associated with a key. Returns the deleted value if it existed.
+
+- `fn clear(&mut self)`
+
+Clears all key-value pairs from the store.
 
 ---
 
