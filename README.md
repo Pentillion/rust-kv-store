@@ -130,7 +130,7 @@ thread::spawn(move || {
 
 ---
 
-### Future Directions
+### Future Directions (Version 2)
 
 Future iterations may include:
 
