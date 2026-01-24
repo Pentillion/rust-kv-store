@@ -14,23 +14,24 @@ This project is meant to learn systems programming concepts in Rust, including:
 
 ---
 
-### Data Structure (Version 1)
+### Data Structure (Version 2)
 
-Internally, the store is backed by a `HashMap<String, String>`:
+Internally, the store is backed by a `RwLock<HashMap<String, String>>`:
 
 ```rust
-use std::collections::HashMap;
+use std::{collections::HashMap, sync::RwLock};
 use serde::{Serialize, Deserialize};
+use std::fs;
 
 #[derive(Serialize, Deserialize)]
 pub struct KvStore {
-    map: HashMap<String, String>,
+    map: RwLock<HashMap<String, String>>,
 }
 ```
 
 ---
 
-### API (Version 1)
+### API (Version 2)
 
 The in-memory key-value store exposes the following methods:
 
@@ -64,7 +65,7 @@ Loads json data from disk, deserializes it and returns KvStore.
 
 ---
 
-### Persistence (Version 1)
+### Persistence (Version 2)
 
 Data can be manually persisted to disk using JSON serialization:
 
@@ -101,11 +102,29 @@ let store = KvStore::load_from_file("store.json")?;
 
 ---
 
+### Thread Safety (Version 2)
+
+`KvStore` is thread-safe: multiple threads can read and write concurrently.  
+Wrap the store in an `Arc` to share ownership across threads:
+
+```rust
+use std::sync::Arc;
+use std::thread;
+
+let store = Arc::new(KvStore::new());
+let store_clone = Arc::clone(&store);
+
+thread::spawn(move || {
+    store_clone.set("key".to_string(), "value".to_string());
+}).join().unwrap();
+```
+
+---
+
 ### Future Directions
 
 Future iterations may include:
 
-- Concurrency and thread-safe access
 - Enhanced observability (logging, metrics)
 - Automatic persistence (auto-save on changes)
 

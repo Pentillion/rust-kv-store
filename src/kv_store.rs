@@ -1,6 +1,6 @@
 //! A simple in-memory key-value store with JSON serialization and disk persistence.
 
-use std::collections::HashMap;
+use std::{collections::HashMap, sync::RwLock};
 use serde::{Serialize, Deserialize};
 use std::fs;
 
@@ -11,46 +11,46 @@ use std::fs;
 /// ```
 /// use rust_kv_store::kv_store::KvStore;
 ///
-/// let mut store = KvStore::new();
+/// let store = KvStore::new();
 /// store.set("key".to_string(), "value".to_string());
 /// assert_eq!(store.get("key"), Some("value".to_string()));
 /// ```
 #[derive(Serialize, Deserialize)]
 pub struct KvStore {
-    map: HashMap<String, String>
+    map: RwLock<HashMap<String, String>>
 }
 
 impl KvStore {
     /// Creates a new empty KvStore.
     pub fn new() -> Self {
         KvStore {
-            map: HashMap::new()
+            map: RwLock::new(HashMap::new())
         }
     }
 
     /// Retrieves the value associated with the given key.
     pub fn get(&self, key: &str) -> Option<String> {
-        self.map.get(key).cloned()
+        self.map.read().unwrap().get(key).cloned()
     }
 
     /// Stores a key-value pair. Overwrites any existing value.
-    pub fn set(&mut self, key: String, value: String) {
-        self.map.insert(key, value);
+    pub fn set(&self, key: String, value: String) {
+        self.map.write().unwrap().insert(key, value);
     }
 
     /// Removes a key-value pair and returns the deleted value.
-    pub fn delete(&mut self, key: &str) -> Option<String> {
-        self.map.remove(key)
+    pub fn delete(&self, key: &str) -> Option<String> {
+        self.map.write().unwrap().remove(key)
     }
 
     /// Removes all key-value pairs from the store.
-    pub fn clear(&mut self) {
-        self.map.clear();
+    pub fn clear(&self) {
+        self.map.write().unwrap().clear();
     }
 
     /// Returns the number of key-value pairs in the store.
     pub fn len(&self) -> usize {
-        self.map.len()
+        self.map.read().unwrap().len()
     }
 
     /// Saves the store to a JSON file.

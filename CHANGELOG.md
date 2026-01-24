@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.0] - 2026-01-24
+
+### Added
+
+- Thread-safe access to `KvStore` using `RwLock`.
+- `get`, `set`, `delete` and `clear` methods can now be safely called from multiple threads.
+- Optional: shared ownership via `Arc` allows concurrent reads and writes across threads.
+
 ## [0.2.0] - 2026-01-17
 
 ### Added
