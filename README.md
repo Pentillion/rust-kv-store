@@ -121,7 +121,7 @@ thread::spawn(move || {
 
 ---
 
-### Limitations
+### Limitations (Version 2)
 
 - Persistence is manual; changes are not automatically saved.
 - JSON files must be UTF-8 encoded.
