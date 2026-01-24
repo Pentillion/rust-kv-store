@@ -121,6 +121,15 @@ thread::spawn(move || {
 
 ---
 
+### Limitations
+
+- Persistence is manual; changes are not automatically saved.
+- JSON files must be UTF-8 encoded.
+- Not optimized for extremely large datasets; HashMap is stored entirely in memory.
+- Multi-threaded performance is limited by RwLock contention for write-heavy workloads.
+
+---
+
 ### Future Directions
 
 Future iterations may include:
