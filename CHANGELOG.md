@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.4.0] - 2026-01-25
+
+### Added
+
+- Write-Ahead Log (WAL) for durability
+- All set, delete, and clear operations are logged to WAL before being applied to memory
+- KvStore automatically replays WAL on startup to restore state after crashes
+- WAL is truncated after snapshot (save_to_file) to prevent growth
+
 ## [0.3.0] - 2026-01-24
 
 ### Added
