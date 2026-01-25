@@ -23,7 +23,6 @@ use std::{collections::HashMap, sync::RwLock};
 use serde::{Serialize, Deserialize};
 use std::fs;
 
-#[derive(Serialize, Deserialize)]
 pub struct KvStore {
     map: RwLock<HashMap<String, String>>,
     wal: Wal
